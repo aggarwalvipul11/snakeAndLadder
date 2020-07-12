@@ -10,4 +10,6 @@ function playerThrowsDice() {
 	randomDiceRolls=$((RANDOM%6+1))
 	echo $randomDiceRolls
 }
+
+playerThrowDice
 #End of Use Case 02
