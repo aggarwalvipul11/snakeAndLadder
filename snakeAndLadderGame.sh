@@ -18,7 +18,7 @@ function playerThrowsDice() {
 	echo $((RANDOM%6+1))
 }
 
-function playerPostionTrack() {
+function playerPositionTrack() {
 	playerOptions=$((RANDOM%3))
 	randomDiceNumber=$((playerThrowDice))
 	case $playerOptions in
