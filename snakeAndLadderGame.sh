@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 
 echo "================ Welcome to SNAKES AND LADDERS ================"
 
@@ -9,39 +9,62 @@ goalOfTheGame=100;
 
 playerLivePosition=0;
 zeroN=0;
+collectDiceRollsWinGame=0;
 
 playerGetsNoPlay=0;
 playerGetsLadder=1;
 playerGetsSnake=2;
 
 function playerThrowsDice() {
-	echo $((RANDOM%6+1))
+	echo $(($((RANDOM %6))+1))
 }
 
+
 function playerPositionTrack() {
-	playerOptions=$((RANDOM%3))
-	randomDiceNumber=$((playerThrowDice))
+	playerOptions=$((RANDOM %3))
+	randomDiceNumber=$(playerThrowsDice )
 	case $playerOptions in
 		$playerGetsNoPlay)
 			playerLivePosition=$((playerLivePosition+zeroN))
+			echo "After dice rolls, player live positon status is: $playerLivePosition"
 			;;
 		$playerGetsLadder)
-			playerLivePosition=$((playerLivePosition+randomDiceNumber))
+			checksPlayerPositionInCaseOfLadder
+			((collectDiceRollsWinGame++))
+			echo "After dice rolls, player live positon status is: $playerLivePosition"
 			;;
 		$playerGetsSnake)			
-			if [[ $playerLivePosition -lt $randomDiceNumber ]]
-			then
-				playerLivePosition=$((playerLivePosition+zeroN));
-			else
-				playerLivePosition=$((playerLivePosition-randomDiceNumber))
-			fi
+			checksPlayerPositionInCaseOfSnake
+			echo "After dice rolls, player live positon status is: $playerLivePosition"
 			;;
 	esac
 }
 
-while [[ positionOfPlayer -le goalOfTheGame ]]
-do
-	playerPositionTrack
-done
+function checksPlayerPositionInCaseOfLadder() {
+	if [[ $(( $playerLivePosition + $randomDiceNumber )) -gt $goalOfTheGame ]]
+	then
+		playerLivePosition=$((playerLivePosition+zeroN));
+	else
+		playerLivePosition=$((playerLivePosition+randomDiceNumber));
+	fi
+}
 
-#End of Use Case 04
+function checksPlayerPositionInCaseOfSnake() {
+	if [[ $playerLivePosition -lt $randomDiceNumber ]]
+	then
+		playerLivePosition=$((playerLivePosition+zeroN));
+	else
+		playerLivePosition=$((playerLivePosition-randomDiceNumber));
+	fi
+}
+
+function gameSnakeNLadderControlPanel() {
+	while [[ $playerLivePosition -ne $goalOfTheGame ]]
+	do
+		playerPositionTrack
+	done
+	echo "Report the dice was played by player to win is: $collectDiceRollsWinGame"
+}
+
+gameSnakeNLadderControlPanel
+#End of Use Case 06
